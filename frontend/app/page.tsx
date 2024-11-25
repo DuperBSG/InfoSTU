@@ -11,9 +11,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import StudentForm from "@/components/studentForm";
 import { StudentData } from "@/lib/types";
+import StudentForm from "@/components/StudentForm";
 
 export default function Home() {
   const [studentData, setStudentData] = useState<StudentData[]>([]);
@@ -55,9 +54,8 @@ export default function Home() {
           ))}
         </TableBody>
       </Table>
-
       <div className="w-full flex justify-end">
-        <StudentForm setStudentData={setStudentData}/>
+        <StudentForm setStudentData={setStudentData} />
       </div>
     </div>
   );
