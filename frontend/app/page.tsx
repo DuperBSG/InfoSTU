@@ -12,24 +12,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-interface StudentData {
-  id: string;
-  name: string;
-  email: string;
-  dob: string;
-  age: number;
-}
+import StudentForm from "@/components/studentForm";
+import { StudentData } from "@/lib/types";
 
 export default function Home() {
   const [studentData, setStudentData] = useState<StudentData[]>([]);
   useEffect(() => {
-    const fetchStudents = async() => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_URL}/api/v1/student`);
+    const fetchStudents = async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SPRING_URL}/api/v1/student`
+      );
       const data = await response.json();
       setStudentData(data);
-    }
+    };
     fetchStudents();
-  }, [])
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 pb-20">
@@ -48,16 +45,20 @@ export default function Home() {
           </TableRow>
         </TableHeader>
         <TableBody>
-        {studentData?.map((student, index) => (
+          {studentData?.map((student, index) => (
             <TableRow key={`${student}-${index}`}>
               <TableCell className="font-medium">{student.name}</TableCell>
               <TableCell>{student.email}</TableCell>
               <TableCell>{student.dob}</TableCell>
               <TableCell>{student.age}</TableCell>
-            </TableRow>      
+            </TableRow>
           ))}
         </TableBody>
       </Table>
+
+      <div className="w-full flex justify-end">
+        <StudentForm setStudentData={setStudentData}/>
+      </div>
     </div>
   );
 }
