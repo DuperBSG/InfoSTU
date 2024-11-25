@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
   Table,
@@ -9,7 +12,25 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+interface StudentData {
+  id: string;
+  name: string;
+  email: string;
+  dob: string;
+  age: number;
+}
+
 export default function Home() {
+  const [studentData, setStudentData] = useState<StudentData[]>([]);
+  useEffect(() => {
+    const fetchStudents = async() => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SPRING_URL}/api/v1/student`);
+      const data = await response.json();
+      setStudentData(data);
+    }
+    fetchStudents();
+  }, [])
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-8 pb-20">
       <h1 className="text-3xl">Student Dashboard</h1>
@@ -23,14 +44,18 @@ export default function Home() {
             <TableHead className="w-[100px]">Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Date of Birth</TableHead>
+            <TableHead>Age</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">LeBron James</TableCell>
-            <TableCell>lebron@gmail.com</TableCell>
-            <TableCell>1990/05/12</TableCell>
-          </TableRow>
+        {studentData?.map((student, index) => (
+            <TableRow key={`${student}-${index}`}>
+              <TableCell className="font-medium">{student.name}</TableCell>
+              <TableCell>{student.email}</TableCell>
+              <TableCell>{student.dob}</TableCell>
+              <TableCell>{student.age}</TableCell>
+            </TableRow>      
+          ))}
         </TableBody>
       </Table>
     </div>
